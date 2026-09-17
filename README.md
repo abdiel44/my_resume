@@ -1,13 +1,47 @@
 # Resume Versioning System
 
-This repository tracks my resume over time using Git. The goal is to keep a clean historical record, preserve reusable resume variants, and make it easy to tailor a resume for different purposes such as internships, research roles, graduate school, scholarships, conferences, and full-time industry applications.
+This repository is a practical example of using Git to track, tailor, render, and improve a resume over time.
+
+The goal is to keep a clean historical record, preserve reusable resume variants, and make it easy to tailor a resume for different purposes such as internships, research roles, graduate school, scholarships, conferences, and full-time industry applications.
 
 The core idea is simple: treat a resume like a living professional artifact, not a file named `Resume_Final_Final_v7.pdf`.
+
+## Use This Repo
+
+You are welcome to clone it, fork it, adapt the workflow, or contribute improvements.
+
+Good ways to use it:
+
+- Use it as a template for your own resume versioning system.
+- Fork it and replace `resume.tex` with your own resume.
+- Copy the branch, commit, and tagging conventions into an existing resume repo.
+- Study the `docs/skills/` folder to see how resume-focused Codex skills can support analysis, tailoring, ATS optimization, and building.
+- Share the idea with students, early-career professionals, career clubs, or workshop audiences.
+
+Quick start:
+
+```bash
+git clone https://github.com/abdiel44/my_resume.git
+cd my_resume
+git checkout -b your-name/main-resume
+```
+
+Then replace the personal content in `resume.tex` with your own information before publishing, sharing, or submitting anything.
+
+## What This Repo Includes
+
+- A LaTeX resume source file.
+- A lightweight Tectonic-based PDF build script.
+- Branching and tagging conventions for resume variants.
+- Public documentation for resume versioning workflows.
+- Resume-focused Codex skill templates for building, analyzing, editing, tailoring, presenting, and orchestrating resume workflows.
+- ATS-aware guidance that favors truthful keyword alignment and parser-friendly formatting, not keyword stuffing.
 
 ## Repository Structure
 
 ```text
 .
++-- .gitignore
 +-- README.md
 +-- Makefile
 +-- docs/
@@ -20,6 +54,39 @@ Current convention:
 - `resume.tex` is the main LaTeX source file.
 - Generated files such as PDFs, logs, aux files, and build artifacts should not be committed unless there is a deliberate reason.
 - Public or shareable versions should be created from tagged commits or clearly named branches.
+
+## How to Adapt It for Yourself
+
+1. Fork or clone the repository.
+2. Create your own working branch.
+
+```bash
+git checkout -b main-resume
+```
+
+3. Replace the personal details in `resume.tex`.
+4. Build the PDF.
+
+```powershell
+./scripts/build.ps1
+```
+
+5. Create purpose-specific branches as needed.
+
+```bash
+git checkout -b internship
+git checkout -b research
+git checkout -b grad-school
+git checkout -b role/company-position
+```
+
+6. Tag versions that you submit or publish.
+
+```bash
+git tag submitted-company-position-2026-09
+```
+
+7. Keep broadly useful improvements on `main`, and keep one-off targeting changes on purpose branches.
 
 ## Build and Export
 
@@ -71,6 +138,35 @@ Package-manager availability can vary, so verify before installing:
 ```powershell
 winget search tectonic
 ```
+
+## Resume Skill Workflow
+
+This repo includes shareable Codex skill templates in `docs/skills/codex/`.
+
+The workflow skill can orchestrate the process from any point:
+
+```text
+design -> analyze -> optimize -> build
+```
+
+Examples:
+
+```text
+$resume-workflow design for this job description
+$resume-workflow analyze my current resume
+$resume-workflow optimize for research roles
+$resume-workflow build
+```
+
+The smaller skills can also be used directly:
+
+- `$resume-builder`: render/export the resume.
+- `$resume-analyzer`: review strengths, gaps, ATS alignment, and risks.
+- `$resume-editor`: improve wording while preserving facts.
+- `$resume-tailor`: adapt the resume to a role, company, program, industry, or ATS screen.
+- `$resume-presenter`: create sanitized demos or teaching material.
+
+To install the skills for personal Codex use, copy the folders under `docs/skills/codex/` into your Codex skills directory.
 
 ## Branch Strategy
 
@@ -292,18 +388,42 @@ Before submitting a resume version:
 
 This repository may contain personal information.
 
-Before making the repository public or using it in a presentation:
+Before making your fork public or using it in a presentation:
 
 - Remove or replace private phone numbers, addresses, emails, IDs, and sensitive links.
 - Avoid exposing private application branches.
 - Consider using a sanitized demo branch.
 - Do not publish resumes that reveal confidential employer, client, or project details.
+- Review tags and branch names; they can reveal application history.
 
 Suggested public demo branch:
 
 ```bash
 git checkout -b demo/resume-versioning
 ```
+
+If you fork this repo, assume `resume.tex` contains example personal data until you replace or sanitize it.
+
+## Contributing
+
+Contributions are welcome, especially improvements that make the workflow easier for students and professionals to reuse.
+
+Good contribution ideas:
+
+- Better cross-platform build instructions.
+- Cleaner LaTeX structure or layout improvements.
+- More resume branch/tagging examples.
+- Stronger ATS-aware review guidance.
+- More presentation/demo material.
+- Improvements to the Codex resume skills.
+
+Contribution guidelines:
+
+- Keep examples privacy-safe.
+- Do not add real private resumes, private job applications, or sensitive employer/client details.
+- Prefer clear, practical documentation over abstract advice.
+- Keep generated PDFs and LaTeX build artifacts out of Git unless a change explicitly requires a sample artifact.
+- Use meaningful commit messages, following the conventions below.
 
 ## Presentation Tip
 
