@@ -9,6 +9,9 @@ The core idea is simple: treat a resume like a living professional artifact, not
 ```text
 .
 +-- README.md
++-- Makefile
++-- docs/
++-- scripts/
 `-- resume.tex
 ```
 
@@ -17,6 +20,57 @@ Current convention:
 - `resume.tex` is the main LaTeX source file.
 - Generated files such as PDFs, logs, aux files, and build artifacts should not be committed unless there is a deliberate reason.
 - Public or shareable versions should be created from tagged commits or clearly named branches.
+
+## Build and Export
+
+This repo uses [Tectonic](https://tectonic-typesetting.github.io/) as the preferred lightweight LaTeX renderer. Tectonic is a single command-line tool that can render `resume.tex` directly to PDF without installing a full traditional TeX distribution.
+
+Build the resume:
+
+```powershell
+./scripts/build.ps1
+```
+
+The output is written to:
+
+```text
+dist/resume.pdf
+```
+
+Open the PDF after building:
+
+```powershell
+./scripts/build.ps1 -Open
+```
+
+Clean generated output:
+
+```powershell
+./scripts/build.ps1 -Clean
+```
+
+If `make` is installed, these aliases are also available:
+
+```bash
+make build
+make open
+make clean
+```
+
+If Tectonic is missing, the script prints install guidance. The official Windows install option from Tectonic is:
+
+```powershell
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://drop-ps1.fullyjustified.net'))
+```
+
+Run that command from the repo root to create a local `tectonic.exe`, or place `tectonic` somewhere on PATH. A local `tectonic.exe` is ignored by Git.
+
+Package-manager availability can vary, so verify before installing:
+
+```powershell
+winget search tectonic
+```
 
 ## Branch Strategy
 
@@ -264,6 +318,11 @@ Useful points for students and professionals:
 - Tags preserve exactly what was submitted.
 - Diffs make resume edits easier to review.
 - A resume repository turns career development into an intentional system.
+
+Additional presentation and skill notes live in:
+
+- `docs/presentation/resume-versioning-demo.md`
+- `docs/skills/resume-skills.md`
 
 ## Golden Rule
 

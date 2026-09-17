@@ -1,0 +1,18 @@
+# LaTeX build artifacts
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.xdv
+
+# Generated resume exports
+dist/
+*.pdf
+tectonic.exe
+
+# Local editor/system files
+.DS_Store
+Thumbs.db
