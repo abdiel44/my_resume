@@ -1,8 +1,16 @@
-# Resume Versioning System
+# AI Resume Framework
 
-This repository is a practical example of using Git to track, tailor, render, and improve a resume over time.
+This repository is an AI-assisted framework for building, tailoring, analyzing, optimizing, versioning, and rendering resumes.
 
-The goal is to keep a clean historical record, preserve reusable resume variants, and make it easy to tailor a resume for different purposes such as internships, research roles, graduate school, scholarships, conferences, and full-time industry applications.
+The best way to use it is with a repo-aware LLM assistant, such as Codex or another CLI coding agent, plus Git and a lightweight LaTeX-to-PDF build workflow.
+
+The goal is to turn resume work into a repeatable system:
+
+```text
+import -> interview -> design -> analyze -> optimize -> build
+```
+
+Use it to keep a clean historical record, preserve reusable resume variants, and tailor a resume for different purposes such as internships, research roles, graduate school, scholarships, conferences, and full-time industry applications.
 
 The core idea is simple: treat a resume like a living professional artifact, not a file named `Resume_Final_Final_v7.pdf`.
 
@@ -12,7 +20,7 @@ You are welcome to clone it, fork it, adapt the workflow, or contribute improvem
 
 Good ways to use it:
 
-- Use it as a template for your own resume versioning system.
+- Use it as a template for your own AI-assisted resume system.
 - Fork it and replace `resume.tex` with your own resume.
 - Copy the branch, commit, and tagging conventions into an existing resume repo.
 - Study the `docs/skills/` folder to see how resume-focused Codex skills can support analysis, tailoring, ATS optimization, and building.
@@ -35,6 +43,9 @@ Then replace the personal content in `resume.tex` with your own information befo
 - Branching and tagging conventions for resume variants.
 - Public documentation for resume versioning workflows.
 - Resume-focused Codex skill templates for building, analyzing, editing, tailoring, presenting, and orchestrating resume workflows.
+- A cascade workflow that lets an LLM start from strategy, analysis, optimization, or PDF generation.
+- A two-layer resume interview system for collecting stable profile facts once and branch-specific facts only when needed.
+- An import-first path for people who already have a resume.
 - ATS-aware guidance that favors truthful keyword alignment and parser-friendly formatting, not keyword stuffing.
 
 ## Repository Structure
@@ -87,6 +98,20 @@ git tag submitted-company-position-2026-09
 ```
 
 7. Keep broadly useful improvements on `main`, and keep one-off targeting changes on purpose branches.
+
+Optional but recommended: if you already have a resume, let an LLM assistant import it into a private profile first, then interview you only for gaps. Use the two-layer context model:
+
+- Copy `docs/templates/resume-profile.template.md` to `.resume/profile.md` for stable facts that rarely change.
+- Copy `docs/templates/resume-brief.template.md` to `.resume/briefs/<branch-name>.md` for target-specific facts.
+
+Both filled files are ignored by default because they may contain private information.
+
+Example:
+
+```text
+$resume-importer extract profile facts from resume.tex
+$resume-interviewer verify my imported profile
+```
 
 ## Build and Export
 
@@ -141,15 +166,41 @@ winget search tectonic
 
 ## Resume Skill Workflow
 
-This repo includes shareable Codex skill templates in `docs/skills/codex/`.
+This repo includes shareable Codex skill templates in `docs/skills/codex/`. These skills are the AI layer of the framework.
+
+Start with the advisor when you are not sure which step comes next:
+
+```text
+$resume-advisor help me improve my resume
+```
 
 The workflow skill can orchestrate the process from any point:
 
 ```text
-design -> analyze -> optimize -> build
+import -> interview -> design -> analyze -> optimize -> build
 ```
 
 Examples:
+
+```text
+$resume-advisor import my existing resume and ask only for gaps
+```
+
+```text
+$resume-advisor tailor this branch for the following job description
+```
+
+```text
+$resume-advisor build the current resume
+```
+
+```text
+$resume-importer extract profile facts from resume.tex
+```
+
+```text
+$resume-interviewer fill my resume brief for a new software engineering resume
+```
 
 ```text
 $resume-workflow design for this job description
@@ -160,6 +211,9 @@ $resume-workflow build
 
 The smaller skills can also be used directly:
 
+- `$resume-advisor`: inspect context and choose the right next step.
+- `$resume-importer`: extract stable facts from an existing resume into a private profile.
+- `$resume-interviewer`: ask questions and fill a private resume brief.
 - `$resume-builder`: render/export the resume.
 - `$resume-analyzer`: review strengths, gaps, ATS alignment, and risks.
 - `$resume-editor`: improve wording while preserving facts.
@@ -167,6 +221,155 @@ The smaller skills can also be used directly:
 - `$resume-presenter`: create sanitized demos or teaching material.
 
 To install the skills for personal Codex use, copy the folders under `docs/skills/codex/` into your Codex skills directory.
+
+## Persistent Resume Context
+
+The AI should not ask every question every time. This framework separates stable context from branch-specific context:
+
+```text
+.resume/profile.md              stable facts reused across branches
+.resume/briefs/<branch-name>.md target-specific facts for one branch
+```
+
+Use the stable profile for information that rarely changes:
+
+- identity and contact preferences,
+- education history,
+- full experience inventory,
+- project inventory,
+- skills and evidence,
+- achievements,
+- reusable resume preferences,
+- privacy boundaries.
+
+Use branch briefs for information that changes by use case:
+
+- target role, company, program, or scholarship,
+- job description or opportunity notes,
+- ATS keywords,
+- evidence to emphasize,
+- section order and tone,
+- target-specific edits,
+- deadline and submission requirements.
+
+The interviewer skill should load `.resume/profile.md` first, then the current branch brief, and ask only for missing, stale, conflicting, or target-specific details.
+
+## Existing Resume Import
+
+Most people already have a resume. In that case, start by importing it instead of answering a full interview.
+
+The importer reads an existing resume source, such as `resume.tex` or pasted resume text, and drafts:
+
+```text
+.resume/profile.md
+```
+
+The draft profile is not treated as final truth. It marks facts as extracted, unknown, or needing verification. Then the interviewer asks only for the missing or unclear pieces.
+
+Example flow:
+
+```text
+$resume-importer extract stable profile facts from resume.tex
+$resume-interviewer verify my imported profile and ask only for missing details
+$resume-workflow design for this job description
+```
+
+This keeps onboarding fast while still protecting accuracy.
+
+## Using a CLI LLM Assistant
+
+This framework is designed to be used with a repo-aware CLI LLM assistant such as Codex or another coding agent that can read files, edit branches, run commands, and show diffs.
+
+The human stays responsible for truth, judgment, and final approval. The assistant helps with repeatable work:
+
+- interviewing the user and filling a private resume brief,
+- importing an existing resume into a draft private profile,
+- designing a resume strategy for a specific purpose,
+- reviewing the current resume,
+- comparing it against a job description or program description,
+- suggesting ATS-aware improvements,
+- editing `resume.tex`,
+- building the PDF,
+- checking `git diff`,
+- preparing a commit or tag when requested.
+
+Example prompts:
+
+```text
+$resume-advisor help me improve my resume using this framework.
+```
+
+```text
+Use this repo as an AI resume framework. Start with import, then interview, design, analyze, optimize, and build.
+```
+
+```text
+Use this repo as an AI resume framework. Import my existing resume first, then interview me only for gaps.
+```
+
+```text
+$resume-interviewer interview me and fill resume-brief.md for this branch.
+```
+
+```text
+$resume-interviewer update my stable profile, then create a branch brief for this job description.
+```
+
+```text
+Analyze my current resume for software engineering roles.
+```
+
+```text
+Create a branch for this job description, tailor the resume, build the PDF, and show me the diff before committing.
+```
+
+```text
+$resume-workflow design for this internship posting, then continue through analyze, optimize, and build.
+```
+
+```text
+$resume-analyzer compare resume.tex against this job description and list ATS gaps without editing files.
+```
+
+```text
+$resume-builder build the resume in this branch.
+```
+
+Recommended agent rules:
+
+- Do not invent experience, dates, titles, metrics, technologies, publications, or credentials.
+- Ask before committing, tagging, pushing, or publishing.
+- Keep generated PDFs out of Git unless explicitly requested.
+- Keep filled `.resume/` files private unless intentionally sanitized.
+- Use branches for purpose-specific variants.
+- Show diffs before finalizing edits.
+- Treat ATS optimization as truthful alignment, not keyword stuffing.
+
+You can use the skill templates in this repo as reusable instructions for Codex-style workflows. OpenAI's public documentation also describes a CLI resource model for skills, including skill creation and versioning, for teams that want to manage reusable skills through the OpenAI CLI.
+
+## Framework Philosophy
+
+This is not meant to replace personal judgment. It is meant to make resume development more systematic.
+
+The LLM is useful for:
+
+- spotting gaps and unclear claims,
+- mapping experience to a target opportunity,
+- finding ATS alignment issues,
+- rewriting bullets with stronger evidence,
+- maintaining separate versions for different audiences,
+- building and checking the final PDF.
+
+The human is responsible for:
+
+- truth,
+- taste,
+- final wording,
+- privacy,
+- deciding what to submit,
+- defending every claim in an interview.
+
+The best results come from combining both: AI for structured iteration, Git for history, LaTeX for clean output, and human judgment for accuracy.
 
 ## Branch Strategy
 
@@ -395,6 +598,7 @@ Before making your fork public or using it in a presentation:
 - Consider using a sanitized demo branch.
 - Do not publish resumes that reveal confidential employer, client, or project details.
 - Review tags and branch names; they can reveal application history.
+- Do not publish filled `.resume/profile.md` or `.resume/briefs/` files unless they have been intentionally sanitized.
 
 Suggested public demo branch:
 

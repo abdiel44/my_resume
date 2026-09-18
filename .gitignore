@@ -13,6 +13,12 @@ dist/
 *.pdf
 tectonic.exe
 
+# Private AI interview/context files
+resume-profile.md
+resume-brief.md
+resume-interview.md
+.resume/
+
 # Local editor/system files
 .DS_Store
 Thumbs.db
