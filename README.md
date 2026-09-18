@@ -1,8 +1,14 @@
 # AI Resume Framework
 
-This repository is an AI-assisted framework for building, tailoring, analyzing, optimizing, versioning, and rendering resumes.
+This repository is an AI-first framework for building, tailoring, analyzing, optimizing, versioning, and rendering resumes.
 
-The best way to use it is with a repo-aware LLM assistant, such as Codex or another CLI coding agent, plus Git and a lightweight LaTeX-to-PDF build workflow.
+The intended way to use it is to talk to a repo-aware LLM assistant, such as Codex or another CLI coding agent. The main entry point is:
+
+```text
+$resume-advisor
+```
+
+You tell the advisor what you want. The advisor inspects the repo, understands the current branch and resume context, then calls the right specialized skills as needed.
 
 The goal is to turn resume work into a repeatable system:
 
@@ -23,7 +29,8 @@ Good ways to use it:
 - Use it as a template for your own AI-assisted resume system.
 - Fork it and replace `resume.tex` with your own resume.
 - Copy the branch, commit, and tagging conventions into an existing resume repo.
-- Study the `docs/skills/` folder to see how resume-focused Codex skills can support analysis, tailoring, ATS optimization, and building.
+- Talk to `$resume-advisor` and let it choose the right resume workflow.
+- Study the `docs/skills/` folder to see how the advisor routes to skills for import, interview, analysis, tailoring, ATS optimization, editing, and building.
 - Share the idea with students, early-career professionals, career clubs, or workshop audiences.
 
 Quick start:
@@ -35,6 +42,12 @@ git checkout -b your-name/main-resume
 ```
 
 Then replace the personal content in `resume.tex` with your own information before publishing, sharing, or submitting anything.
+
+Recommended first prompt:
+
+```text
+$resume-advisor help me set up this repo for my resume
+```
 
 ## What This Repo Includes
 
@@ -75,14 +88,20 @@ Current convention:
 git checkout -b main-resume
 ```
 
-3. Replace the personal details in `resume.tex`.
-4. Build the PDF.
+3. Talk to the advisor.
+
+```text
+$resume-advisor import my existing resume and ask only for gaps
+```
+
+4. Replace or import the personal details in `resume.tex`.
+5. Build the PDF when the advisor recommends it.
 
 ```powershell
 ./scripts/build.ps1
 ```
 
-5. Create purpose-specific branches as needed.
+6. Create purpose-specific branches as needed.
 
 ```bash
 git checkout -b internship
@@ -91,13 +110,13 @@ git checkout -b grad-school
 git checkout -b role/company-position
 ```
 
-6. Tag versions that you submit or publish.
+7. Tag versions that you submit or publish.
 
 ```bash
 git tag submitted-company-position-2026-09
 ```
 
-7. Keep broadly useful improvements on `main`, and keep one-off targeting changes on purpose branches.
+8. Keep broadly useful improvements on `main`, and keep one-off targeting changes on purpose branches.
 
 Optional but recommended: if you already have a resume, let an LLM assistant import it into a private profile first, then interview you only for gaps. Use the two-layer context model:
 
@@ -168,11 +187,13 @@ winget search tectonic
 
 This repo includes shareable Codex skill templates in `docs/skills/codex/`. These skills are the AI layer of the framework.
 
-Start with the advisor when you are not sure which step comes next:
+For normal use, start with the advisor:
 
 ```text
 $resume-advisor help me improve my resume
 ```
+
+You do not need to know which skill to call. The advisor can decide whether the next step is import, interview, analysis, tailoring, editing, building, or presentation support.
 
 The workflow skill can orchestrate the process from any point:
 
@@ -219,6 +240,8 @@ The smaller skills can also be used directly:
 - `$resume-editor`: improve wording while preserving facts.
 - `$resume-tailor`: adapt the resume to a role, company, program, industry, or ATS screen.
 - `$resume-presenter`: create sanitized demos or teaching material.
+
+Most users should call `$resume-advisor` first. Direct skill calls are useful when you already know the exact operation you want.
 
 To install the skills for personal Codex use, copy the folders under `docs/skills/codex/` into your Codex skills directory.
 
@@ -280,8 +303,17 @@ This keeps onboarding fast while still protecting accuracy.
 
 This framework is designed to be used with a repo-aware CLI LLM assistant such as Codex or another coding agent that can read files, edit branches, run commands, and show diffs.
 
+In practice, you talk to `$resume-advisor` like a resume coach:
+
+```text
+$resume-advisor I want to apply to this role. Here is the job description...
+```
+
+The advisor decides what to do next. It may import your current resume, ask verification questions, create or update private context, analyze ATS alignment, tailor bullets, build the PDF, or suggest a branch/tag workflow.
+
 The human stays responsible for truth, judgment, and final approval. The assistant helps with repeatable work:
 
+- deciding which resume skill should run next,
 - interviewing the user and filling a private resume brief,
 - importing an existing resume into a draft private profile,
 - designing a resume strategy for a specific purpose,
@@ -297,6 +329,18 @@ Example prompts:
 
 ```text
 $resume-advisor help me improve my resume using this framework.
+```
+
+```text
+$resume-advisor I already have a resume. Import it and ask me only what is missing.
+```
+
+```text
+$resume-advisor Here is a job description. Create the right branch strategy, tailor the resume, and show me the diff before committing.
+```
+
+```text
+$resume-advisor Review this branch for ATS alignment and build the PDF when ready.
 ```
 
 ```text
